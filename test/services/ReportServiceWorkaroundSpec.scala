@@ -3,11 +3,11 @@ package services
 import org.specs2.mutable.Specification
 
 /**
- * Workaround, using new to avoid hitting Specs2 DI limitations
+ * Workaround, using the Guice injector
  */
-class ReportServiceWorkaroundSpec extends Specification {
+class ReportServiceWorkaroundSpec extends Specification with Inject {
 
-  val service = new ReportService(new UserService, new SupportService)
+  lazy val service = inject[ReportService]
 
   "ReportService" should {
     "Work" in {
@@ -18,3 +18,12 @@ class ReportServiceWorkaroundSpec extends Specification {
 }
 
 
+import play.api.inject.guice.GuiceApplicationBuilder
+import scala.reflect.ClassTag    
+
+trait Inject {
+  lazy val injector = (new GuiceApplicationBuilder).injector
+
+  def inject[T : ClassTag]: T = 
+    injector.instanceOf[T]
+}
