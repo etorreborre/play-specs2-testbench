@@ -1,7 +1,11 @@
 package services
 
-class UserService {
+trait UserService {
 
-  def foo = "foo"
+  def foo: String
 
+}
+
+class DefaultUserService extends UserService {
+  def foo: String = "foo"
 }
